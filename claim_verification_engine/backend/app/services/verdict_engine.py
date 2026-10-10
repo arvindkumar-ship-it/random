@@ -135,7 +135,7 @@ class FinalVerdictEngine:
             'claim': claim,
             'verdict': verdict,
             'confidence': ensemble_score,
-            'confidence_interval_95': ci,
+            'score_bounds': ci,
             'method_scores': {
                 'bayesian': posterior,
                 'dempster_shafer': belief_plaus['belief']['TRUE'],

@@ -54,10 +54,10 @@ class BayesianVerifier:
     def bayesian_update(self, evidence_list: List[Dict[str, Any]]) -> Tuple[float, Tuple[float, float]]:
         """
         Bayesian belief update
-        Returns: (posterior_probability, 95% confidence_interval)
+        Returns: (heuristic_score, uninformative_interval). No calibration dataset exists.
         """
         if not evidence_list:
-            return 0.5, (0.3, 0.7)
+            return 0.5, (0.0, 1.0)
 
         # Calculate likelihood for each evidence
         likelihoods = []
@@ -75,9 +75,5 @@ class BayesianVerifier:
                         (1 - combined_likelihood) * (1 - self.prior))
         posterior = numerator / denominator if denominator > 0 else 0.5
 
-        # Calculate 95% confidence interval using beta distribution
-        alpha = max(posterior * 100, 0.01)
-        beta = max((1 - posterior) * 100, 0.01)
-        ci_low, ci_high = stats.beta.interval(0.95, alpha, beta)
-
-        return posterior, (ci_low, ci_high)
+        # A fixed invented concentration cannot establish a 95% interval.
+        return float(posterior), (0.0, 1.0)

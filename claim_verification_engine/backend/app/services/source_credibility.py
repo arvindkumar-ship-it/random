@@ -1,4 +1,5 @@
 import networkx as nx
+from urllib.parse import urlsplit
 from typing import List, Dict, Any
 
 
@@ -8,7 +9,7 @@ class SourceCredibilityAnalyzer:
         self._load_credibility_database()
 
     def _load_credibility_database(self):
-        """Load Media Bias/Fact Check ratings"""
+        """Illustrative hardcoded weights; these are not independently verified ratings."""
         credibility_ratings = {
             'pib.gov.in': {'factual_reporting': 0.95, 'bias': 0.1},
             'thehindu.com': {'factual_reporting': 0.9, 'bias': 0.2},
@@ -30,7 +31,11 @@ class SourceCredibilityAnalyzer:
         self.graph.add_edge(source1, source2, type=relationship_type, weight=strength)
 
     def calculate_credibility_score(self, domain: str) -> float:
-        """Calculate credibility using network-enhanced scoring"""
+        """Uncalibrated source-weight heuristic; normalize host before matching."""
+        parsed = urlsplit(domain if "://" in domain else "//" + domain)
+        domain = (parsed.hostname or "").lower().rstrip(".")
+        if not domain or (parsed.scheme and parsed.scheme not in {"http", "https"}):
+            return 0.5
         if domain not in self.graph:
             # Unknown domain: check parent domain / known TLD patterns
             known_patterns = {
@@ -41,7 +46,8 @@ class SourceCredibilityAnalyzer:
                 '.com': 0.55
             }
             for pattern, score in known_patterns.items():
-                if pattern in domain:
+                suffix = pattern.lstrip(".")
+                if domain == suffix or domain.endswith("." + suffix):
                     return score
             return 0.5
 
@@ -65,7 +71,7 @@ class SourceCredibilityAnalyzer:
 
         subgraph = self.graph.subgraph(sources)
         avg_credibility = (
-            sum(self.graph.nodes[s].get('factual_reporting', 0.5) for s in sources) / len(sources)
+            sum(self.calculate_credibility_score(s) for s in sources) / len(sources)
         )
         density = nx.density(subgraph)
 
