@@ -36,7 +36,9 @@ class VerificationResult(BaseModel):
     claim: str
     verdict: VerdictType
     confidence: float = Field(ge=0.0, le=1.0)
+    confidence_kind: str = "uncalibrated_heuristic"
     confidence_interval: Tuple[float, float]
+    confidence_interval_kind: str = "uninformative_bounds; no statistical coverage claim"
     reasoning: str
     evidence_count: int
     supporting_count: int

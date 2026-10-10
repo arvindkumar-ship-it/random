@@ -112,7 +112,7 @@ class VerificationPipeline:
             claim=input_data['text'],
             verdict=VerdictType(verdict_data['verdict']),
             confidence=verdict_data['confidence'],
-            confidence_interval=verdict_data['confidence_interval_95'],
+            confidence_interval=verdict_data['score_bounds'],
             reasoning=verdict_data['reasoning'],
             evidence_count=verdict_data['evidence_count'],
             supporting_count=verdict_data['supporting_count'],

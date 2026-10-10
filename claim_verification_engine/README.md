@@ -8,7 +8,7 @@ analysis to produce an explainable verdict with citations and confidence.
 
 - **Claim Extraction** — atomic claim decomposition using an LLM
 - **Evidence Retrieval** — multi-source (Tavily, Exa) parallel search
-- **Bayesian Verification** — real-time probability updates with a 95% confidence interval
+- **Bayesian Verification** — uncalibrated heuristic updates with uninformative [0,1] bounds
 - **Dempster-Shafer Fusion** — handles conflicting evidence with belief/plausibility intervals
 - **OSINT Integration** — Wayback Machine snapshot checks, EXIF metadata, geolocation verification
 - **Source Credibility** — network-enhanced credibility scoring
@@ -102,3 +102,6 @@ Verdict Engine (Bayesian + Dempster-Shafer + Weighted Vote, ensembled)
    ↓
 Explainable Output (Verdict + Confidence + Reasoning + Evidence)
 ```
+
+
+[Audit repairs and remaining evidence](../AUDIT_FIXES.md).

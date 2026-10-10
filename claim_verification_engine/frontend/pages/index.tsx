@@ -108,7 +108,7 @@ const Home: NextPage = () => {
                 {verdictStyle.label}
               </span>
               <span className="text-sm text-ink-soft">
-                {(result.confidence * 100).toFixed(0)}% confidence
+                {(result.confidence * 100).toFixed(0)}% heuristic score (uncalibrated)
               </span>
             </div>
 
